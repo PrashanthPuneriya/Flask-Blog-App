@@ -1,9 +1,9 @@
 from flask.views import MethodView
-
+# from 
 
 class PostAllView(MethodView):
     def get(self):
-        # List all the posts
+        
         pass
 
     def delete(self):
