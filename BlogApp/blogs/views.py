@@ -1,7 +1,7 @@
 from flask.views import MethodView
-from flask import make_response, jsonify
+from flask import make_response
 from .. import db
-from flask import json
+import json
 
 
 class PostAllView(MethodView):
@@ -13,35 +13,37 @@ class PostAllView(MethodView):
         )
 
         """
-            cursor.execute(
-                "INSERT INTO blogs VALUES (%s, %s, %s, %s)",
-                (2, "user1-title2", "user1-content2", 1)
-            )
-            connection.commit()
+        cursor.execute(
+            "INSERT INTO blogs VALUES (%s, %s, %s, %s)",
+            (2, "user1-title2", "user1-content2", 1)
+        )
+        connection.commit()
 
-            print(cursor.description) # tuple of tuples
-            print(posts) # list of tuples
+        print(cursor.description) # tuple of tuples
+        print(cursor.fetchall()) # list of tuples
 
-            for col in cursor.description:
-                print(col[0]) # Column names   
+        for col in cursor.description:
+            print(col[0]) # Column names   
         """
 
         rows = cursor.fetchall()
         column_names = [col[0] for col in cursor.description]
-        # posts = [dict(zip(column_names, row)) for row in rows]
+        posts = [dict(zip(column_names, row)) for row in rows]
+
+        """
         posts = []
         for row in rows:
-            obj = dict(zip(column_names, row))
-            posts.append(obj)
+            dict_obj = dict(zip(column_names, row))
+            posts.append(dict_obj)
+        """
 
-        print(type(posts))
+        response = make_response(json.dumps(posts), 200)
 
-        response = make_response(jsonify(posts), 200)
-        # response = response_class(
-        #     response=json.dumps(posts),
-        #     status=200,
-        #     mimetype='application/json'
-        # )
+        """
+        json.dumps() serializes the data i.e. encodes the python data
+        
+        json.loads() deserializes the data i.e. decodes the json data or string of json formatted data into python data type
+        """
 
         return response
 
