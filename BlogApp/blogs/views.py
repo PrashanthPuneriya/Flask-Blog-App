@@ -121,7 +121,7 @@ class PostUserView(MethodView):
         )
 
         connection.commit()
-        
+
         return ({'Success': 'Deleted all the user posts successfully'})
 
 
