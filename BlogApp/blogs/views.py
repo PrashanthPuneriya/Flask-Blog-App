@@ -37,19 +37,25 @@ class PostAllView(MethodView):
             posts.append(dict_obj)
         """
 
-        response = make_response(json.dumps(posts), 200)
-
         """
         json.dumps() serializes the data i.e. encodes the python data
         
         json.loads() deserializes the data i.e. decodes the json data or string of json formatted data into python data type
         """
 
+        response = make_response(json.dumps(posts), 200)
         return response
 
     def delete(self):
-        # Delete all the posts
-        pass
+        connection = db.get_db()
+        cursor = connection.cursor()
+        cursor.execute(
+            "DELETE FROM blogs;"
+        )
+        connection.commit()
+        data = {'Success': 'Deleted all posts successfully'}
+        response = make_response(data, 200)
+        return response
 
 
 class PostUserView(MethodView):
