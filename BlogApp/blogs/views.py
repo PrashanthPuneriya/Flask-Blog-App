@@ -63,7 +63,8 @@ class PostUserView(MethodView):
         cursor = connection.cursor()
 
         cursor.execute(
-            f"SELECT title, content FROM blogs, users WHERE user_id=users.id AND user_id={str(user)};"
+            "SELECT title, content FROM blogs, users WHERE user_id=users.id AND user_id=%s;",
+            (user, )
         )
 
         rows = cursor.fetchall()
@@ -88,10 +89,12 @@ class PostUserView(MethodView):
         post_content = data['content']
 
         cursor.execute(
-            f"INSERT INTO blogs (title, content, user_id) VALUES ('{post_title}', '{post_content}', '{str(user)}');"
+            "INSERT INTO blogs (title, content, user_id) VALUES (%s, %s, %s);",
+            (post_title, post_content, user)
         )
         cursor.execute(
-            f"SELECT email FROM users WHERE users.id={str(user)};"
+            "SELECT email FROM users WHERE users.id=%s;",
+            (user, )
         )
 
         user_email = cursor.fetchone()
@@ -107,7 +110,8 @@ class PostUserView(MethodView):
         connection = db.get_db()
         cursor = connection.cursor()
         cursor.execute(
-            f"DELETE FROM blogs WHERE blogs.user_id={str(user)};"
+            "DELETE FROM blogs WHERE blogs.user_id=%s;",
+            (user, )
         )
         connection.commit()
         return ({"Success": "Deleted all the user posts successfully"})
@@ -119,7 +123,8 @@ class PostDetailView(MethodView):
         connection = db.get_db()
         cursor = connection.cursor()
         cursor.execute(
-            f"SELECT title, content, users.email FROM blogs, users WHERE blogs.user_id=users.id AND blogs.id={str(post_id)};"
+            "SELECT title, content, users.email FROM blogs, users WHERE blogs.user_id=users.id AND blogs.id=%s;",
+            (post_id, )
         )
         row = cursor.fetchone()
         if row is not None:
@@ -144,10 +149,12 @@ class PostDetailView(MethodView):
         user = data['user']
 
         cursor.execute(
-            f"UPDATE blogs SET title='{post_title}', content='{post_content}', user_id='{user}' WHERE blogs.id={str(post_id)};"
+            "UPDATE blogs SET title=%s, content=%s, user_id=%s WHERE blogs.id=%s;",
+            (post_title, post_content, user, post_id)
         )
         cursor.execute(
-            f"SELECT email FROM users WHERE users.id={str(user)};"
+            "SELECT email FROM users WHERE users.id=%s;",
+            (user, )
         )
 
         user_email = cursor.fetchone()
@@ -160,7 +167,8 @@ class PostDetailView(MethodView):
         connection = db.get_db()
         cursor = connection.cursor()
         cursor.execute(
-            f"DELETE FROM blogs WHERE blogs.id={str(post_id)};"
+            "DELETE FROM blogs WHERE blogs.id=%s;",
+            (post_id, )
         )
         connection.commit()
         return ({"Success": "Deleted the post successfully"})
