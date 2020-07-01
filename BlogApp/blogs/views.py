@@ -38,7 +38,7 @@ class PostAllView(MethodView):
         json.loads() deserializes the data i.e. decodes the json data or string of json formatted data into python data type
         """
 
-        response = make_response(json.dumps(posts), 200)
+        response = make_response(json.dumps(posts))
         response.mimetype = 'application/json'
         return response
 
@@ -78,7 +78,7 @@ class PostUserView(MethodView):
 
     def post(self):
         # Create a post under the user
-        user = 2
+        user = 1
 
         connection = db.get_db()
         cursor = connection.cursor()
@@ -98,7 +98,7 @@ class PostUserView(MethodView):
 
         connection.commit()
 
-        return ({"Success": "Post saved successfully", "title": post_title, "content": post_content, "user": user_email[0]})
+        return ({"Success": "Post saved successfully", "title": post_title, "content": post_content, "user": user_email[0]}, 201)
 
     def delete(self):
         # Delete all the user posts
@@ -131,7 +131,7 @@ class PostDetailView(MethodView):
             response.mimetype = 'application/json'
             return response
         else:
-            return ({"Error": "Post doesn't exist"})
+            return ({"Error": "Post doesn't exist"}, 400)
 
     def patch(self, post_id):
         # PATCH -> Because we are updating only certain fields of the post but not the entire entity
