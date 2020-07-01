@@ -69,7 +69,8 @@ class PostUserView(MethodView):
         cursor = connection.cursor()
 
         cursor.execute(
-            "SELECT title, content FROM blogs WHERE blogs.user_id = %s;", str(user)
+            "SELECT title, content FROM blogs WHERE blogs.user_id = %s;",
+            str(user)
         )
 
         rows = cursor.fetchall()
@@ -118,7 +119,9 @@ class PostUserView(MethodView):
         cursor.execute(
             "DELETE FROM blogs WHERE user_id = %s;", str(user)
         )
+
         connection.commit()
+        
         return ({'Success': 'Deleted all the user posts successfully'})
 
 
