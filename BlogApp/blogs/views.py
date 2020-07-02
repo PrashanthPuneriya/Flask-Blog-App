@@ -1,7 +1,8 @@
 import json
+from flask import make_response, request, session
 from flask.views import MethodView
-from flask import make_response, request
 from .. import db
+from ..accounts.views import login_required
 
 
 class PostAllView(MethodView):
@@ -55,9 +56,10 @@ class PostAllView(MethodView):
 
 class PostUserView(MethodView):
     # User ID must be obtained via auth for the following methods. For now included a dummy user_id
+    @login_required
     def get(self):
         # List all the posts of the user
-        user = 1
+        user = session['user_id']
 
         connection = db.get_db()
         cursor = connection.cursor()

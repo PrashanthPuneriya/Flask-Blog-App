@@ -1,5 +1,4 @@
 from flask import Blueprint
-
 from .views import (
     PostAllView,
     PostDetailView,
