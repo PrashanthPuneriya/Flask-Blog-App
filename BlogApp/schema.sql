@@ -1,5 +1,6 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS blogs;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS blogs CASCADE;
+DROP TABLE IF EXISTS sessions CASCADE;
 
 CREATE TABLE users(
     id serial PRIMARY KEY,
@@ -14,4 +15,10 @@ CREATE TABLE blogs(
     title VARCHAR (255) NOT NULL,
     content TEXT,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE sessions(
+    id serial PRIMARY KEY,
+    session_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );

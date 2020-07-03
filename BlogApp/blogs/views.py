@@ -59,7 +59,7 @@ class PostUserView(MethodView):
     @login_required
     def get(self):
         # List all the posts of the user
-        user = session['user_id']
+        user = session['session_id']
 
         connection = db.get_db()
         cursor = connection.cursor()
@@ -79,9 +79,10 @@ class PostUserView(MethodView):
         response.mimetype = 'application/json'
         return response
 
+    @login_required
     def post(self):
         # Create a post under the user
-        user = 1
+        user = session['session_id']
 
         connection = db.get_db()
         cursor = connection.cursor()
